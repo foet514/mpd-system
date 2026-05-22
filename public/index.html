@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MPD System - Police Department Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="login-container" class="login-container">
+    <div class="login-box">
+      <div class="login-header">
+        <h1>MPD System</h1>
+        <p>Police Department Management System</p>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn-login">Login</button>
+        <div id="loginError" class="error-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="main-app" class="main-app" style="display: none;">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>MPD System</h2>
+        <button id="sidebarToggle" class="sidebar-toggle">☰</button>
+      </div>
+      <nav class="sidebar-nav">
+        <ul id="navMenu"></ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="userInfo" class="user-info"></div>
+        <button id="logoutBtn" class="btn-logout">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="header-right">
+          <div class="clock" id="systemClock"></div>
+          <div class="user-menu">
+            <span id="userDisplay"></span>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page">
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <h3>Active Warrants</h3>
+              <p id="activeWarrants" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Announcements</h3>
+              <p id="announcements" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Active Employees</h3>
+              <p id="activeEmployees" class="stat-number">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Today's Clock-ins</h3>
+              <p id="todayClockIns" class="stat-number">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements Page -->
+        <div id="announcements-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Announcements</h2>
+            <button id="newAnnouncementBtn" class="btn-primary">+ New Announcement</button>
+          </div>
+          <div id="announcementsList" class="list-container"></div>
+        </div>
+
+        <!-- Clock-In System Page -->
+        <div id="clock-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Clock In/Out System</h2>
+          </div>
+          <div class="clock-system">
+            <div class="clock-controls">
+              <button id="clockInBtn" class="btn-success btn-lg">Clock In</button>
+              <button id="pauseBtn" class="btn-warning btn-lg" disabled>Pause Shift</button>
+              <button id="resumeBtn" class="btn-info btn-lg" disabled>Resume Shift</button>
+              <button id="clockOutBtn" class="btn-danger btn-lg" disabled>Clock Out</button>
+            </div>
+            <div id="clockStatus" class="clock-status">
+              <p>No active shift</p>
+            </div>
+            <div id="clockRecordsList" class="list-container"></div>
+          </div>
+        </div>
+
+        <!-- Warrant System Page -->
+        <div id="warrant-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Warrant Management</h2>
+            <button id="newWarrantBtn" class="btn-primary">+ New Warrant Request</button>
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="active-warrants">Active Warrants</button>
+            <button class="tab-btn" data-tab="warrant-requests">Pending Requests</button>
+          </div>
+          <div id="active-warrants" class="tab-content active">
+            <div id="warrantsList" class="list-container"></div>
+          </div>
+          <div id="warrant-requests" class="tab-content" style="display: none;">
+            <div id="warrantRequestsList" class="list-container"></div>
+          </div>
+        </div>
+
+        <!-- Event Logs Page -->
+        <div id="event-logs-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Event Logs</h2>
+          </div>
+          <div id="eventLogsList" class="list-container"></div>
+        </div>
+
+        <!-- Admin Logs Page -->
+        <div id="admin-logs-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Administrator Logs</h2>
+          </div>
+          <div id="adminLogsList" class="list-container"></div>
+        </div>
+
+        <!-- Oversight Logs Page -->
+        <div id="oversight-logs-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Oversight Logs</h2>
+          </div>
+          <div id="oversightLogsList" class="list-container"></div>
+        </div>
+
+        <!-- Chain of Command Page -->
+        <div id="chain-of-command-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Chain of Command</h2>
+          </div>
+          <div id="chainOfCommandList" class="list-container"></div>
+        </div>
+
+        <!-- Manage Users Page -->
+        <div id="manage-users-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Manage Users</h2>
+            <button id="newUserBtn" class="btn-primary">+ New User</button>
+          </div>
+          <div id="usersList" class="list-container"></div>
+        </div>
+
+        <!-- Manage Roles Page -->
+        <div id="manage-roles-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Manage Roles</h2>
+          </div>
+          <div id="rolesList" class="list-container"></div>
+        </div>
+
+        <!-- Kill Sites Page -->
+        <div id="kill-sites-page" class="page" style="display: none;">
+          <div class="page-header">
+            <h2>Kill Site Reports</h2>
+            <button id="newKillSiteBtn" class="btn-primary">+ Report Kill Site</button>
+          </div>
+          <div id="killSitesList" class="list-container"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="announcementModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>New Announcement</h2>
+      <form id="announcementForm">
+        <div class="form-group">
+          <label for="announcementTitle">Title</label>
+          <input type="text" id="announcementTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="announcementContent">Content</label>
+          <textarea id="announcementContent" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Create Announcement</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="warrantRequestModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>New Warrant Request</h2>
+      <form id="warrantRequestForm">
+        <div class="form-group">
+          <label for="suspectName">Suspect Name</label>
+          <input type="text" id="suspectName" required>
+        </div>
+        <div class="form-group">
+          <label for="warrantType">Warrant Type</label>
+          <select id="warrantType" required>
+            <option value="">Select Type</option>
+            <option value="arrest">Arrest Warrant</option>
+            <option value="search">Search Warrant</option>
+            <option value="bench">Bench Warrant</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="warrantDescription">Description</label>
+          <textarea id="warrantDescription" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="killSiteModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Report Kill Site</h2>
+      <form id="killSiteForm">
+        <div class="form-group">
+          <label for="killSiteLocation">Location</label>
+          <input type="text" id="killSiteLocation" required>
+        </div>
+        <div class="form-group">
+          <label for="killSiteDescription">Description</label>
+          <textarea id="killSiteDescription" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Report Kill Site</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
