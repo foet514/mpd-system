@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPD System - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>MPD System</h2>
+                <p id="userRole">Loading...</p>
+            </div>
+            
+            <ul class="sidebar-menu" id="sidebarMenu">
+                <li><a href="#" class="menu-link active" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" class="menu-link" data-section="announcements">Announcements</a></li>
+                <li><a href="#" class="menu-link" data-section="chain-of-command">Chain of Command</a></li>
+                <li><a href="#" class="menu-link" data-section="clock-in">Clock In/Out</a></li>
+                <li><a href="#" class="menu-link" data-section="event-log">Event Log</a></li>
+                <li><a href="#" class="menu-link" data-section="warrant-system">Warrants</a></li>
+                <li><a href="#" class="menu-link" data-section="kill-site">Kill Site</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="manage-users">Manage Users</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="manage-roles">Manage Roles</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="admin-logs">Administrator Logs</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="oversight-logs">Oversight Logs</a></li>
+            </ul>
+        </aside>
+        
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- TOPBAR -->
+            <div class="topbar">
+                <h1>MPD System</h1>
+                <div class="topbar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">US</div>
+                        <div>
+                            <div id="userName" style="font-weight: 600;">User Name</div>
+                            <div id="userRankDisplay" style="font-size: 12px; color: #666;">Rank</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- CONTENT SECTIONS -->
+            <div class="content">
+                
+                <!-- DASHBOARD SECTION -->
+                <section id="dashboard" class="section active">
+                    <h2 class="page-title">Dashboard</h2>
+                    <p class="page-subtitle">Welcome to MPD System Management</p>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon">👥</div>
+                            <div class="card-title">Total Users</div>
+                            <div class="card-value" id="totalUsers">12</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">🔔</div>
+                            <div class="card-title">Announcements</div>
+                            <div class="card-value" id="totalAnnouncements">5</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">⚖️</div>
+                            <div class="card-title">Active Warrants</div>
+                            <div class="card-value" id="activeWarrants">3</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">⏱️</div>
+                            <div class="card-title">Clocked In</div>
+                            <div class="card-value" id="clockedInCount">8</div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentActivityTable">
+                                <tr>
+                                    <td>2:45 PM</td>
+                                    <td>Chief of Police</td>
+                                    <td>Clocked In</td>
+                                    <td><span class="badge badge-success">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2:30 PM</td>
+                                    <td>Police Inspector</td>
+                                    <td>Approved Warrant</td>
+                                    <td><span class="badge badge-success">Complete</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- ANNOUNCEMENTS SECTION -->
+                <section id="announcements" class="section">
+                    <h2 class="page-title">Announcements</h2>
+                    <p class="page-subtitle">Important system announcements</p>
+                    
+                    <button class="btn btn-primary" onclick="openAnnouncementModal()">Add Announcement</button>
+                    
+                    <div class="table-container" style="margin-top: 20px;">
+                        <div class="table-header">
+                            <h3>All Announcements</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Content</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcementsTable">
+                                <tr>
+                                    <td>2024-01-15</td>
+                                    <td>System Maintenance</td>
+                                    <td>Administrator</td>
+                                    <td>System will be offline for maintenance</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-small">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- CHAIN OF COMMAND -->
+                <section id="chain-of-command" class="section">
+                    <h2 class="page-title">Chain of Command</h2>
+                    <p class="page-subtitle">Metropolitan Police Department Organization</p>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Organizational Structure</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Division</th>
+                                    <th>Department</th>
+                                    <th>Head</th>
+                                    <th>Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chainOfCommandTable">
+                                <tr>
+                                    <td>Administration</td>
+                                    <td>Administration</td>
+                                    <td>Administrator</td>
+                                    <td>Administrator</td>
+                                </tr>
+                                <tr>
+                                    <td>MPD HQ</td>
+                                    <td>Command</td>
+                                    <td>Chief of Police</td>
+                                    <td>Chief of Police</td>
+                                </tr>
+                                <tr>
+                                    <td>Patrol Services - North</td>
+                                    <td>Patrol Services Division</td>
+                                    <td>Police Commander</td>
+                                    <td>Police Commander</td>
+                                </tr>
+                                <tr>
+                                    <td>Patrol Services - South</td>
+                                    <td>Patrol Services Division</td>
+                                    <td>Deputy Police Commander</td>
+                                    <td>Deputy Police Commander</td>
+                                </tr>
+                                <tr>
+                                    <td>Investigation Unit</td>
+                                    <td>Investigation Office Division</td>
+                                    <td>Police Inspector</td>
+                                    <td>Police Inspector</td>
+                                </tr>
+                                <tr>
+                                    <td>Turnover Affairs Bureau</td>
+                                    <td>Investigation Office Division</td>
+                                    <td>Police Inspector</td>
+                                    <td>Police Inspector</td>
+                                </tr>
+                                <tr>
+                                    <td>Office of Integrated Training</td>
+                                    <td>MPD Academy</td>
+                                    <td>Captain</td>
+                                    <td>Captain</td>
+                                </tr>
+                                <tr>
+                                    <td>Office of Leadership & Management</td>
+                                    <td>MPD Academy</td>
+                                    <td>Captain</td>
+                                    <td>Captain</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- CLOCK IN/OUT SECTION -->
+                <section id="clock-in" class="section">
+                    <h2 class="page-title">Clock In/Out System</h2>
+                    <p class="page-subtitle">Manage your shift hours</p>
+                    
+                    <div class="clock-status">
+                        <div>Current Status: <strong id="clockStatus">Clocked Out</strong></div>
+                        <div class="clock-display" id="clockDisplay">00:00:00</div>
+                        <div class="clock-buttons">
+                            <button class="btn btn-success" onclick="clockIn()">Clock In</button>
+                            <button class="btn btn-danger" onclick="clockOut()">Clock Out</button>
+                            <button class="btn btn-warning" onclick="pauseShift()" id="pauseBtn" style="display: none;">Pause Shift</button>
+                            <button class="btn btn-primary" onclick="resumeShift()" id="resumeBtn" style="display: none;">Resume Shift</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Your Clock History</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Clock In Time</th>
+                                    <th>Clock Out Time</th>
+                                    <th>Total Hours</th>
+                                    <th>Pauses</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clockHistoryTable">
+                                <tr>
+                                    <td>08:00 AM</td>
+                                    <td>04:00 PM</td>
+                                    <td>8h 00m</td>
+                                    <td>30 min (1 pause)</td>
+                                    <td><span class="badge badge-success">Complete</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Clock Management for Managers -->
+                    <div id="clockManagementSection" style="display: none; margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px; color: var(--primary-color);">Clock Management</h3>
+                        <p class="page-subtitle">Manage employee clocks</p>
+                        
+                        <div class="table-container">
+                            <div class="table-header">
+                                <h3>Employee Clock Records</h3>
+                                <button class="btn btn-primary" onclick="openClockManagementModal()">Manage Clock</button>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Status</th>
+                                        <th>Clock In</th>
+                                        <th>Current Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clockManagementTable">
+                                    <tr>
+                                        <td>Police Officer John</td>
+                                        <td><span class="badge badge-success">Clocked In</span></td>
+                                        <td>08:00 AM</td>
+                                        <td>8h 30m</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-small" onclick="editEmployeeClock(1)">Edit</button>
+                                            <button class="btn btn-danger btn-small" onclick="voidEmployeeClock(1)">Void</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- EVENT LOG SECTION -->
+                <section id="event-log" class="section">
+                    <h2 class="page-title">Event Log</h2>
+                    <p class="page-subtitle">System and user activity logs</p>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Event History</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Event Type</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventLogTable">
+                                <tr>
+                                    <td>2024-01-15 14:30:00</td>
+                                    <td>Chief of Police</td>
+                                    <td>Clock In</td>
+                                    <td>User clocked in for shift</td>
+                                    <td><span class="badge badge-success">Success</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-15 14:25:00</td>
+                                    <td>Police Inspector</td>
+                                    <td>Warrant Approved</td>
+                                    <td>Warrant #W001 approved</td>
+                                    <td><span class="badge badge-success">Success</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- WARRANT SYSTEM -->
+                <section id="warrant-system" class="section">
+                    <h2 class="page-title">Warrant System</h2>
+                    <p class="page-subtitle">Manage warrants and requests</p>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="openWarrantRequestModal()">Request Warrant</button>
+                    </div>
+                    
+                    <!-- Tabs for Warrant sections -->
+                    <div style="margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="switchWarrantTab('active')">Active Warrants</button>
+                        <button class="btn btn-secondary" onclick="switchWarrantTab('requests')">Warrant Requests</button>
+                        <button class="btn btn-secondary" onclick="switchWarrantTab('pending')">Pending Approval</button>
+                        <button class="btn btn-secondary" onclick="switchWarrantTab('history')">Warrant History</button>
+                    </div>
+                    
+                    <!-- Active Warrants -->
+                    <div id="warrantActiveTab" class="table-container">
+                        <div class="table-header">
+                            <h3>Active Warrants</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Warrant ID</th>
+                                    <th>Suspect Name</th>
+                                    <th>Charge</th>
+                                    <th>Issued Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeWarrantsTable">
+                                <tr>
+                                    <td>W001</td>
+                                    <td>John Doe</td>
+                                    <td>Grand Theft Auto</td>
+                                    <td>2024-01-10</td>
+                                    <td><span class="badge badge-danger">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-success btn-small" onclick="markWarrantServed(1)">Mark Served</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Warrant Requests -->
+                    <div id="warrantRequestsTab" class="table-container" style="display: none;">
+                        <div class="table-header">
+                            <h3>Warrant Requests</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Requested By</th>
+                                    <th>Suspect</th>
+                                    <th>Reason</th>
+                                    <th>Date Requested</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warrantRequestsTable">
+                                <tr>
+                                    <td>WR001</td>
+                                    <td>Police Officer</td>
+                                    <td>Jane Smith</td>
+                                    <td>Burglary Investigation</td>
+                                    <td>2024-01-15</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-small" onclick="submitWarrantRequest(1)">Submit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pending Approval -->
+                    <div id="warrantPendingTab" class="table-container" style="display: none;">
+                        <div class="table-header">
+                            <h3>Pending Approval</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Warrant ID</th>
+                                    <th>Suspect</th>
+                                    <th>Submitted By</th>
+                                    <th>Date Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warrantPendingTable">
+                                <tr>
+                                    <td>W002</td>
+                                    <td>Robert Brown</td>
+                                    <td>Police Inspector</td>
+                                    <td>2024-01-15</td>
+                                    <td>
+                                        <button class="btn btn-success btn-small" onclick="approveWarrant(2)">Approve</button>
+                                        <button class="btn btn-danger btn-small" onclick="rejectWarrant(2)">Reject</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Warrant History -->
+                    <div id="warrantHistoryTab" class="table-container" style="display: none;">
+                        <div class="table-header">
+                            <h3>Warrant History</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Warrant ID</th>
+                                    <th>Suspect</th>
+                                    <th>Issued Date</th>
+                                    <th>Served Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warrantHistoryTable">
+                                <tr>
+                                    <td>W000</td>
+                                    <td>Michael Johnson</td>
+                                    <td>2024-01-01</td>
+                                    <td>2024-01-05</td>
+                                    <td><span class="badge badge-success">Served</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- KILL SITE SECTION -->
+                <section id="kill-site" class="section">
+                    <h2 class="page-title">Kill Site Reports</h2>
+                    <p class="page-subtitle">Officer-involved shooting reports and documentation</p>
+                    
+                    <button class="btn btn-primary" onclick="openKillSiteModal()">Create Report</button>
+                    
+                    <div class="table-container" style="margin-top: 20px;">
+                        <div class="table-header">
+                            <h3>Kill Site Records</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Report ID</th>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Officer</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="killSiteTable">
+                                <tr>
+                                    <td>KS001</td>
+                                    <td>2024-01-10</td>
+                                    <td>Downtown District</td>
+                                    <td>Officer Smith</td>
+                                    <td><span class="badge badge-warning">Under Review</span></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-small">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- MANAGE USERS SECTION -->
+                <section id="manage-users" class="section">
+                    <h2 class="page-title">Manage Users</h2>
+                    <p class="page-subtitle">Administrator user management</p>
+                    
+                    <button class="btn btn-primary" onclick="openAddUserModal()">Add New User</button>
+                    
+                    <div class="table-container" style="margin-top: 20px;">
+                        <div class="table-header">
+                            <h3>All Users</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Rank</th>
+                                    <th>Department</th>
+                                    <th>Division</th>
+                                    <th>Login Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- Populated from USERS_DB -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- MANAGE ROLES SECTION -->
+                <section id="manage-roles" class="section">
+                    <h2 class="page-title">Manage Roles</h2>
+                    <p class="page-subtitle">Administrator role management</p>
+                    
+                    <button class="btn btn-primary" onclick="openAddRoleModal()">Add New Role</button>
+                    
+                    <div class="table-container" style="margin-top: 20px;">
+                        <div class="table-header">
+                            <h3>All Roles</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Role Name</th>
+                                    <th>Role ID</th>
+                                    <th>Description</th>
+                                    <th>Permissions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rolesTable">
+                                <tr>
+                                    <td>Administrator</td>
+                                    <td>admin</td>
+                                    <td>Full system access</td>
+                                    <td>All</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-small">Edit</button>
+                                        <button class="btn btn-danger btn-small">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>MPD HQ</td>
+                                    <td>hq</td>
+                                    <td>Headquarters access</td>
+                                    <td>View, Approve, Report</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-small">Edit</button>
+                                        <button class="btn btn-danger btn-small">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- ADMINISTRATOR LOGS -->
+                <section id="admin-logs" class="section">
+                    <h2 class="page-title">Administrator Logs</h2>
+                    <p class="page-subtitle">Administrator activity logs</p>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Admin Activities</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Administrator</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminLogsTable">
+                                <tr>
+                                    <td>2024-01-15 10:30:00</td>
+                                    <td>foet514</td>
+                                    <td>User Created</td>
+                                    <td>Created user account for Chief of Police</td>
+                                    <td><span class="badge badge-success">Success</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- OVERSIGHT LOGS -->
+                <section id="oversight-logs" class="section">
+                    <h2 class="page-title">Oversight Logs</h2>
+                    <p class="page-subtitle">System oversight and compliance logs</p>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Oversight Records</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Officer</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="oversightLogsTable">
+                                <tr>
+                                    <td>2024-01-15</td>
+                                    <td>Warrant</td>
+                                    <td>Warrant #W001 approved by Chief</td>
+                                    <td>Chief of Police</td>
+                                    <td><span class="badge badge-success">Approved</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODALS -->
+    
+    <!-- Announcement Modal -->
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Add Announcement</span>
+                <button class="modal-close" onclick="closeModal('announcementModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="announcementTitle" placeholder="Announcement title">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea id="announcementContent" placeholder="Announcement content"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('announcementModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addAnnouncement()">Post</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Warrant Request Modal -->
+    <div id="warrantRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Request Warrant</span>
+                <button class="modal-close" onclick="closeModal('warrantRequestModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Suspect Name</label>
+                        <input type="text" id="suspectName" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Suspect ID/DOB</label>
+                        <input type="text" id="suspectID" placeholder="ID or DOB">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Charge</label>
+                        <input type="text" id="warrantCharge" placeholder="Charge details">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Reason for Warrant</label>
+                        <textarea id="warrantReason" placeholder="Detailed reason"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('warrantRequestModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createWarrantRequest()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Clock Management Modal -->
+    <div id="clockManagementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Manage Clock</span>
+                <button class="modal-close" onclick="closeModal('clockManagementModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Employee</label>
+                        <select id="employeeSelect">
+                            <option>Police Officer John</option>
+                            <option>Police Officer Jane</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Action</label>
+                        <select id="clockAction">
+                            <option value="edit">Edit Hours</option>
+                            <option value="add">Add Time</option>
+                            <option value="subtract">Subtract Time</option>
+                            <option value="void">Void Shift</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Time (HH:MM)</label>
+                        <input type="text" id="clockTime" placeholder="00:00">
+                    </div>
+                    <div class="form-group">
+                        <label>Reason</label>
+                        <input type="text" id="clockReason" placeholder="Reason for change">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('clockManagementModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="applyClockManagement()">Apply Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Kill Site Modal -->
+    <div id="killSiteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Create Kill Site Report</span>
+                <button class="modal-close" onclick="closeModal('killSiteModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Incident Date</label>
+                        <input type="date" id="incidentDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Officer Name</label>
+                        <input type="text" id="officerName" placeholder="Officer name">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="killSiteLocation" placeholder="Incident location">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="killSiteDescription" placeholder="Incident description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('killSiteModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="submitKillSiteReport()">Submit Report</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Add New User</span>
+                <button class="modal-close" onclick="closeModal('addUserModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="newUsername" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="newPassword" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="newName" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Rank</label>
+                        <select id="newRank">
+                            <option>Police Officer</option>
+                            <option>Sergeant</option>
+                            <option>Lieutenant</option>
+                            <option>Captain</option>
+                            <option>Police Inspector</option>
+                            <option>Police Commander</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select id="newDepartment">
+                            <option>Patrol Services Division</option>
+                            <option>Investigation Office Division</option>
+                            <option>MPD Academy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Division</label>
+                        <select id="newDivision">
+                            <option>Patrol Services - North</option>
+                            <option>Patrol Services - South</option>
+                            <option>Investigation Unit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Login Type</label>
+                        <select id="newLoginType">
+                            <option value="employee">Employee</option>
+                            <option value="unitstaff">Unit Staff</option>
+                            <option value="unitcommand">Unit Command</option>
+                            <option value="hicomm">High Command</option>
+                            <option value="hq">MPD HQ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewUser()">Add User</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Role Modal -->
+    <div id="addRoleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Add New Role</span>
+                <button class="modal-close" onclick="closeModal('addRoleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role Name</label>
+                        <input type="text" id="roleName" placeholder="Role name">
+                    </div>
+                    <div class="form-group">
+                        <label>Role ID</label>
+                        <input type="text" id="roleID" placeholder="Role ID (lowercase)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="roleDescription" placeholder="Role description"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Permissions</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" value="view"> View
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" value="create"> Create
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" value="edit"> Edit
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" value="delete"> Delete
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" value="approve"> Approve
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addRoleModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewRole()">Create Role</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
